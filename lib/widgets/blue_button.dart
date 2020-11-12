@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class BlueButton extends StatelessWidget {
   
   final String text;
-  final Function callback;
+  final Function onPressed;
 
   const BlueButton({
     @required this.text, 
-    @required this.callback
+    @required this.onPressed
   });
 
   
@@ -19,7 +19,7 @@ class BlueButton extends StatelessWidget {
       highlightElevation: 5,
       color: Colors.blue,
       shape: StadiumBorder(),
-      onPressed: this.callback,
+      onPressed: this.onPressed,
       child: Container(
         width: double.infinity,
         height: 55,

@@ -1,5 +1,9 @@
-import 'package:chat_app/widgets/blue_button.dart';
+import 'package:chat_app/helpers/show_alert.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+
+import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/widgets/blue_button.dart';
 import 'package:chat_app/widgets/labels.dart';
 import 'package:chat_app/widgets/logo.dart';
 import 'package:chat_app/widgets/custom_input.dart';
@@ -53,6 +57,9 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+
+    final authService = Provider.of<AuthService>(context);
+    
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
@@ -62,7 +69,7 @@ class __FormState extends State<_Form> {
             icon: Icons.people,
             placeholder: 'Nombre',
             keyboardType: TextInputType.text,
-            textController: emailCtrl,
+            textController: nameCtrl,
           ),
           CustomInputField(
             icon: Icons.mail_outline,
@@ -79,12 +86,19 @@ class __FormState extends State<_Form> {
           ),
           
           BlueButton(
-            callback: (){
-              print(emailCtrl.text);
-              print(passwdCtrl.text);
-              print(nameCtrl.text);
+            onPressed: authService.onProcessing ? null : () async {
+              FocusScope.of(context).unfocus();
+              final registerOk = await authService.register(nameCtrl.text.trim(), emailCtrl.text.trim(), passwdCtrl.text.trim());
+              if(registerOk == 'ok'){
+
+                Navigator.pushReplacementNamed(context, 'users');
+
+              }
+              else {
+                showAlert(context, 'Error', registerOk);
+              }
             },
-            text: 'Ingrese',
+            text: 'Registrarse',
           ),
           
         ],

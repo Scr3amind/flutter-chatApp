@@ -1,8 +1,11 @@
-import 'package:chat_app/widgets/blue_button.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/widgets/blue_button.dart';
 import 'package:chat_app/widgets/labels.dart';
 import 'package:chat_app/widgets/logo.dart';
 import 'package:chat_app/widgets/custom_input.dart';
+import 'package:chat_app/helpers/show_alert.dart';
 
 
 class LoginPage extends StatelessWidget {
@@ -52,6 +55,9 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
@@ -72,9 +78,17 @@ class __FormState extends State<_Form> {
           ),
           
           BlueButton(
-            callback: (){
-              print(emailCtrl.text);
-              print(passwdCtrl.text);
+            onPressed: authService.onProcessing ? null : () async {
+              FocusScope.of(context).unfocus();
+              final loginOk = await authService.login(emailCtrl.text.trim(), passwdCtrl.text.trim());
+              if(loginOk){
+
+                Navigator.pushReplacementNamed(context, 'users');
+
+              }
+              else {
+                showAlert(context, 'Error', 'Falló el inicio de sesión');
+              }
             },
             text: 'Ingrese',
           ),
