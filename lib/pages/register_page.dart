@@ -1,4 +1,5 @@
 import 'package:chat_app/helpers/show_alert.dart';
+import 'package:chat_app/services/socket_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -59,6 +60,7 @@ class __FormState extends State<_Form> {
   Widget build(BuildContext context) {
 
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
     
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -92,6 +94,7 @@ class __FormState extends State<_Form> {
               if(registerOk == 'ok'){
 
                 Navigator.pushReplacementNamed(context, 'users');
+                socketService.connect();
 
               }
               else {

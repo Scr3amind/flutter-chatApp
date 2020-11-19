@@ -1,3 +1,4 @@
+import 'package:chat_app/services/socket_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/services/auth_service.dart';
@@ -57,6 +58,7 @@ class __FormState extends State<_Form> {
   Widget build(BuildContext context) {
 
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -82,7 +84,7 @@ class __FormState extends State<_Form> {
               FocusScope.of(context).unfocus();
               final loginOk = await authService.login(emailCtrl.text.trim(), passwdCtrl.text.trim());
               if(loginOk){
-
+                socketService.connect();
                 Navigator.pushReplacementNamed(context, 'users');
 
               }
